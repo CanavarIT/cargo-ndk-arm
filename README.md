@@ -211,7 +211,7 @@ Variables you can set:
 | Variable | Description |
 |----------|-------------|
 | `ANDROID_NDK_HOME` | Path to the NDK root. If unset, the highest NDK version found in the default locations is used |
-| `CARGO_NDK_HOST_TAG` | Force the `toolchains/llvm/prebuilt/<tag>` directory name (for example `linux-arm64`). **New in this fork** |
+| `CARGO_NDK_HOST_TAG` | Force the `toolchains/llvm/prebuilt/<tag>` directory name (for example `linux-arm64`). If that directory does not exist, `cargo-ndk-arm` stops with an error. **New in this fork** |
 | `CARGO_NDK_TARGET` | Default target(s), comma-separated |
 | `CARGO_NDK_PLATFORM` | Default Android API level |
 | `CARGO_NDK_OUTPUT_PATH` | Default output directory |
@@ -273,6 +273,8 @@ Tested by the author:
 - Android NDK 29.0.14033849, an ARM64-hosted build with a `linux-arm64` prebuilt directory
 - Building an executable and a `cdylib` for `arm64-v8a`, and running the executable on the device
 - Building a `cdylib` for `armeabi-v7a`, `x86` and `x86_64` (output verified with `file`: ARM aarch64, ARM EABI5, Intel i386 and x86-64 ELF files, all built by NDK r29)
+- Building a crate with a C dependency (the `cc` crate compiling a `.c` file with the NDK's clang) for `arm64-v8a`
+- Installing with `cargo install --git ... cargo-ndk-arm --locked`, and the project's unit tests (`cargo test`) on the device
 
 The extra Rust standard libraries for the non-ARM64 ABIs come from Termux packages (names as of Termux with Rust 1.99.1; if they differ on your system, find the right ones with `pkg search rust-std`):
 
