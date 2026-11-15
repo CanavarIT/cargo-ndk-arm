@@ -16,10 +16,10 @@ The installed commands keep the upstream names, so existing scripts and docs kee
 ## Install in one command
 
 ```sh
-cargo install --git https://github.com/CanavarIT/cargo-ndk-arm --locked
+cargo install --git https://github.com/CanavarIT/cargo-ndk-arm cargo-ndk-arm --locked
 ```
 
-Building on the device takes a few minutes. Then point `cargo-ndk-arm` at your NDK (see below).
+The package name at the end is required: the repository also contains example crates, and `cargo install` refuses to guess. Building on the device takes a few minutes. Then point `cargo-ndk-arm` at your NDK (see below).
 
 > **Important: the NDK is not included.** You must install an ARM64-compatible Android NDK yourself and set `ANDROID_NDK_HOME` to its path, for example:
 >
