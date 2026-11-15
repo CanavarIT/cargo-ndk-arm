@@ -153,7 +153,7 @@ cargo ndk -t armeabi-v7a -t arm64-v8a -o ./jniLibs build --release
 
 `-t` selects the Android targets (ordinary Rust target triples are accepted too), `-o` sets the output directory in which the `.so` files are placed in the layout Android expects (`jniLibs/<abi>/lib<name>.so`), and everything after that is passed to `cargo`.
 
-On a phone you will normally want only `arm64-v8a`. Other ABIs need the matching Rust standard library (for example `aarch64-linux-android` is bundled with Termux's `rust`, other targets may require extra packages — check `pkg search rust-std`).
+On a phone you will normally want only `arm64-v8a`. Other ABIs need the matching Rust standard library, which Termux provides as separate packages (`pkg search rust-std`): `rust-std-armv7-linux-androideabi`, `rust-std-i686-linux-android` and `rust-std-x86-64-linux-android`. The `aarch64-linux-android` library comes with Termux's `rust` package. If a package name has changed in your Termux version, run `pkg search rust-std` and install the one that matches your target (the description reads "Component files for target ...").
 
 ### Choose the Android API level
 
@@ -269,11 +269,20 @@ Symlinked directories are supported.
 Tested by the author:
 
 - Termux on an ARM64 Android device
-- Rust 1.99.1 from the Termux `rust` package, which includes `aarch64-linux-android`
+- Rust 1.99.1 from the Termux `rust` package
 - Android NDK 29.0.14033849, an ARM64-hosted build with a `linux-arm64` prebuilt directory
 - Building an executable and a `cdylib` for `arm64-v8a`, and running the executable on the device
+- Building a `cdylib` for `armeabi-v7a`, `x86` and `x86_64` (output verified with `file`: ARM aarch64, ARM EABI5, Intel i386 and x86-64 ELF files, all built by NDK r29)
 
-Not tested: ABIs other than `arm64-v8a`, `cargo ndk-test`/`cargo-ndk-runner` on a device, native ARM64 desktop Linux, and other terminal environments on Android. Reports and fixes are welcome.
+The extra Rust standard libraries for the non-ARM64 ABIs come from Termux packages (names as of Termux with Rust 1.99.1; if they differ on your system, find the right ones with `pkg search rust-std`):
+
+```sh
+pkg install rust-std-armv7-linux-androideabi   # armeabi-v7a
+pkg install rust-std-i686-linux-android        # x86
+pkg install rust-std-x86-64-linux-android      # x86_64
+```
+
+Not tested: `cargo ndk-test` / `cargo-ndk-runner` on a device, native ARM64 desktop Linux, and other terminal environments on Android. Reports and fixes are welcome.
 
 ## Building and installing from source
 
