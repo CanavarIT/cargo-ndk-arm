@@ -13,8 +13,25 @@ The installed commands keep the upstream names, so existing scripts and docs kee
 
 > **Note:** this fork installs the same binary names as upstream `cargo-ndk`. Installing it replaces an upstream `cargo-ndk` in `~/.cargo/bin`.
 
+## Install in one command
+
+```sh
+cargo install --git https://github.com/CanavarIT/cargo-ndk-arm --locked
+```
+
+Building on the device takes a few minutes. Then point `cargo-ndk-arm` at your NDK (see below).
+
+> **Important: the NDK is not included.** You must install an ARM64-compatible Android NDK yourself and set `ANDROID_NDK_HOME` to its path, for example:
+>
+> ```sh
+> export ANDROID_NDK_HOME=$HOME/android-sdk/ndk/29.0.14033849
+> ```
+>
+> Put the NDK inside the Termux home directory, and use your own NDK directory name. Details: [Getting an ARM64 NDK](#getting-an-arm64-ndk).
+
 ## Table of contents
 
+- [Install in one command](#install-in-one-command)
 - [What is different from upstream](#what-is-different-from-upstream)
 - [Requirements](#requirements)
 - [Quick start (Termux, ARM64)](#quick-start-termux-arm64)
@@ -63,7 +80,7 @@ Everything else (CLI, flags, output layout, environment variables) is unchanged.
    cd cargo-ndk-arm
    ```
 
-3. Install:
+3. Install (from the cloned source; or use the one-command install above and skip steps 2–3):
 
    ```sh
    cargo install --path . --locked
@@ -79,7 +96,7 @@ Everything else (CLI, flags, output layout, environment variables) is unchanged.
    source ~/.bashrc
    ```
 
-   Replace `<ndk-version>` with your NDK directory name, for example `29.0.14033849`.
+   **Replace the path with the location of your own NDK.** The example uses `<ndk-version>` as a placeholder; use your NDK directory name, for example `29.0.14033849`. The path must be inside the Termux home directory.
 
 ## Getting an ARM64 NDK
 
