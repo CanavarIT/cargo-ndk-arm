@@ -116,8 +116,42 @@ fn find_first_consistent_var_set<'a>(
     first_var_set
 }
 
+/// Exit with a clear error if `CARGO_NDK_HOST_TAG` points to a toolchain
+/// directory that does not exist inside the given NDK.
+fn check_host_tag_override(shell: &mut Shell, ndk_home: &Path) {
+    let tag = match std::env::var("CARGO_NDK_HOST_TAG") {
+        Ok(tag) if !tag.is_empty() => tag,
+        _ => return,
+    };
+
+    let dir = ndk_home
+        .join("toolchains")
+        .join("llvm")
+        .join("prebuilt")
+        .join(&tag);
+
+    if dir.is_dir() {
+        return;
+    }
+
+    let _ = shell.error(format!(
+        "CARGO_NDK_HOST_TAG is set to `{tag}`, but {} does not exist.",
+        dir.display()
+    ));
+    let _ = shell.note(
+        "Unset CARGO_NDK_HOST_TAG to auto-detect the toolchain directory,\nor set it to one of the directories in <NDK>/toolchains/llvm/prebuilt/.",
+    );
+    std::process::exit(1);
+}
+
 /// Return a path to a discovered NDK and string describing how it was found
 fn derive_ndk_path(shell: &mut Shell) -> Option<(PathBuf, String)> {
+    let found = derive_ndk_path_unchecked(shell)?;
+    check_host_tag_override(shell, &found.0);
+    Some(found)
+}
+
+fn derive_ndk_path_unchecked(shell: &mut Shell) -> Option<(PathBuf, String)> {
     let ndk_vars = [
         "ANDROID_NDK_HOME",
         "ANDROID_NDK_ROOT",
