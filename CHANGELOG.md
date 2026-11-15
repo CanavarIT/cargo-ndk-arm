@@ -4,6 +4,7 @@
 
 - Feature: `cargo-ndk` now builds and runs natively on Android (Termux, ARM64); the `CARGO_NDK_ON_ANDROID` build-time opt-in is gone
 - Feature: the NDK host toolchain directory (`prebuilt/<tag>`) is detected at runtime (`linux-aarch64`, `linux-arm64`, `linux-x86_64`, ...) and can be forced with `CARGO_NDK_HOST_TAG`
+- Fix: a `CARGO_NDK_HOST_TAG` that points to a missing toolchain directory now stops with a clear error
 - Fix: `adb` is found by scanning `PATH` instead of calling `which`, which is missing in Termux
 - Fix: default NDK location on Android is `$HOME/android-sdk/ndk`, then `$HOME/Android/Sdk/ndk`
 
